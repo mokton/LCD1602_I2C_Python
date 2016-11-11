@@ -44,15 +44,20 @@ def send_data(data):
 
 def init_lcd():
     try:
-        send_command(0x33) # Must initialize to 8-line mode at first
+	time.sleep(0.015)
+        send_command(0x28) # Must initialize to 8-line mode at first
         time.sleep(0.005)
-        send_command(0x32) # Then initialize to 4-line mode
+        send_command(0x38) # Then initialize to 4-line mode
         time.sleep(0.005)
-        send_command(0x28) # 2 Lines & 5*7 dots
+        send_command(0x38) # 2 Lines & 5*7 dots
         time.sleep(0.005)
-        send_command(0x0C) # Enable display without cursor
+        send_command(0x38)
+        time.sleep(0.005)
+        send_command(0x08) # Disable display
         time.sleep(0.005)
         send_command(0x01) # Clear Screen
+        time.sleep(0.005)
+        send_command(0x0C) # Enable display without cursor
     except:
         return False
     else:
@@ -65,15 +70,18 @@ def open_light():  # Enable the backlight
     BUS.write_byte(0x27,0x08)
     BUS.close()
 
+# Move cursor to line x bit y, x and y all start from 1
 def print_lcd(x, y, str):
-    if x < 0:
+    x -= 1
+    y -= 1
+    if x <0:
         x = 0
-    if x > 15:
-        x = 15
-    if y <0:
+    if x > 1:
+        x = 1
+    if y < 0:
         y = 0
-    if y > 1:
-        y = 1
+    if y > 15:
+        y = 15
 
     # Move cursor
     addr = 0x80 + 0x40 * y + x
@@ -85,6 +93,6 @@ def print_lcd(x, y, str):
 if __name__ == '__main__':
     init_lcd()
 
-    print_lcd(0, 0, 'Hello, jjun!')
-    print_lcd(8, 1, 'jjun')
+    print_lcd(0, 0, 'Hello, Angus!')
+    print_lcd(8, 1, 'Angus')
     open_light()
