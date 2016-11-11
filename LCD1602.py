@@ -44,7 +44,7 @@ def send_data(data):
 
 def init_lcd():
     try:
-	time.sleep(0.015)
+        time.sleep(0.015)
         send_command(0x28) # Must initialize to 8-line mode at first
         time.sleep(0.005)
         send_command(0x38) # Then initialize to 4-line mode
